@@ -25,3 +25,11 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.mode-menu{
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  flex-direction: column;
+
+}
