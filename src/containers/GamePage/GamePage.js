@@ -67,6 +67,38 @@ export default function GamePage(props) {
             if (chessObj.move(move))
                 setVisibility(chessObj.moves(), chessObj.turn());
         }
+
+        if (chessObj.history().length > 0) {
+            const undoMoveBtn = document.getElementById("undo-move-btn");
+            const restartGameBtn = document.getElementById("restart-game-btn");
+
+            undoMoveBtn.classList.remove("disabled");
+            restartGameBtn.classList.remove("disabled");
+        }
+    }
+
+    const undoMove = () => {
+        chessObj.undo();
+        setVisibility();
+
+        if (chessObj.history().length === 0) {
+            const undoMoveBtn = document.getElementById("undo-move-btn");
+            const restartGameBtn = document.getElementById("restart-game-btn");
+
+            undoMoveBtn.classList.add("disabled");
+            restartGameBtn.classList.add("disabled");
+        }
+    }
+
+    const restartGame = () => {
+        chessObj.load(props.initPosition);
+        setVisibility();
+
+        const undoMoveBtn = document.getElementById("undo-move-btn");
+        const restartGameBtn = document.getElementById("restart-game-btn");
+
+        undoMoveBtn.classList.add("disabled");
+        restartGameBtn.classList.add("disabled");
     }
 
     return (
@@ -83,12 +115,11 @@ export default function GamePage(props) {
             <div className="game-menu">
                 <h2 class="white-and-underlined">Move</h2>
                 <h2 class="white">{chessObj.turn() === 'w' ? "White" : "Black"}</h2>
-                <Button className="game-menu-button" color="primary" size="lg" disabled>Undo Move</Button>
-                <Button className="game-menu-button" color="primary" size="lg" disabled>Restart Game</Button>
+                <Button id="undo-move-btn" className="game-menu-button disabled" color="primary" size="lg" onClick={undoMove}>Undo Move</Button>
+                <Button id="restart-game-btn" className="game-menu-button disabled" color="primary" size="lg" onClick={restartGame}>Restart Game</Button>
                 <Link to={appRoutes.menu}>
                     <Button className="game-menu-button" color="primary" size="lg">Main Menu</Button>
                 </Link>
-
             </div>
         </div>
     )
