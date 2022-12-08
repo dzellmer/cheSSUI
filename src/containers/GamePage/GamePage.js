@@ -16,15 +16,15 @@ export default function GamePage(props) {
         return self.indexOf(value) === index;
     }
 
-    const setVisibility = (moves) => {
-        if (props.gameMode === "Fog of War" && props.opponent === "Computer") {
+    const setVisibility = (moves = [], color = "") => {
+        if (props.gameMode === "Fog of War") {
 
             mirrorChessObj.load(chessObj.fen());
 
             let visibleSpaces = moves.map(m => m.slice(-2));
             chessObj.board().forEach(row => {
                 row.forEach(col => {
-                    if (col !== null && col.color === 'w') {
+                    if (col !== null && col.color === color) {
                         visibleSpaces.push(col.square)
                     }
                 })
@@ -58,16 +58,14 @@ export default function GamePage(props) {
                     if (moves.length > 0) {
                         const computerMove = moves[Math.floor(Math.random() * moves.length)];
                         chessObj.move(computerMove);
-                        console.log("SETTING VISIBILITY")
-                        setVisibility(chessObj.moves());
+                        setVisibility(chessObj.moves(), 'w');
                     }
                 }, 300);
-                console.log("SETTING POSITION")
-                setVisibility(chessObj.moves());
-                // setPosition(chessObj.fen());
+                setVisibility(chessObj.moves(), 'w');
             }
         } else {
-            setPosition(chessObj.fen());
+            if (chessObj.move(move))
+                setVisibility(chessObj.moves(), chessObj.turn());
         }
     }
 

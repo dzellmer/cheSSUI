@@ -117,6 +117,14 @@ h2 {
   color: white;
 }
 
+.option-selector {
+  border-radius: 5px;
+  border: 2px solid;
+  color: black;
+  padding: 6px 10px;
+  margin: 6px;
+}
+
 #puzzle-selection {
   display: flex;
   overflow: scroll;
