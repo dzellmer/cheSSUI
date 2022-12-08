@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React  from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
 
 import Chessboard from "chessboardjsx";
 
-import chessPuzzles from "../../shared/chessPuzzles";
 import appRoutes from "../../shared/appRoutes";
+import chessPuzzles from "../../shared/chessPuzzles";
+import { standardStartingPositon, fogOfWarStartingPosition } from "../../shared/positions";
 
 export default function GameOptionsPage(props) {
-    const [gameMode, setGameMode] = useState("Standard");
 
     const gameModeOptions = ["Standard", "Puzzle", "Fog of War"].map((val) => <option value={val}>{val}</option>);
     const opponentOptions = ["Human", "Computer"].map((val) => <option value={val}>{val}</option>);
@@ -25,22 +25,28 @@ export default function GameOptionsPage(props) {
     const selectGameMode = (e) => {
         let mode = e.target.value;
         let puzzleDisplay = document.getElementById("puzzle-selection");
-        if (mode === "Puzzle") {
-            puzzleDisplay.style.visibility = "visible";
-        } else {
-            puzzleDisplay.style.visibility = "hidden";
+        if (mode !== "Select") {
+            if (mode === "Puzzle") {
+                puzzleDisplay.style.visibility = "visible";
+            } else {
+                puzzleDisplay.style.visibility = "hidden";
+                if (mode === "Fog of War") {
+                    console.log(fogOfWarStartingPosition)
+                    props.setPosition(fogOfWarStartingPosition)
+                } else if (mode === "Standard") {
+                    props.setPosition(standardStartingPositon)
+                }
+            }
+            props.setGameMode(mode);
         }
-        setGameMode(mode);
     }
 
     const selectOpponent = (e) => {
-        let opponent = e.target.value;
-        props.setOpponent(opponent);
+        if (e.target.value !== "Select")
+            props.setOpponent(e.target.value);
     }
 
     const selectPuzzle = (p) => {
-        console.log(`In GAME OPTIONS ${p}`);
-        props.setGameMode(gameMode);
         props.setPosition(p);
     }
 
@@ -51,12 +57,14 @@ export default function GameOptionsPage(props) {
                 <div className="game-option">
                     <h2>Opponent</h2>
                     <select name="opponentType" id="opponentType" class="option-selector selection" onChange={selectOpponent}>
+                        <option value="Select">Select</option>
                         {opponentOptions}
                     </select>
                 </div>
                 <div className="game-option">
                     <h2>Game Mode</h2>
                     <select name="gameMode" id="gameMode" class="option-selector selection" onChange={selectGameMode}>
+                        <option value="Select">Select</option>
                         {gameModeOptions}
                     </select>
                 </div>
