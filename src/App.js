@@ -6,9 +6,10 @@ import GamePage from './containers/GamePage/GamePage';
 
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import db from "./index";
-import {getFirestore,collection, addDoc, query, onSnapshot,setDoc,updateDoc,doc, getDocs, where, deleteDoc, getDoc } from 'firebase/firestore';
 
+import db from "./index";
+import {onSnapshot,doc } from 'firebase/firestore';
+import GameOptionsPage from './containers/GameOptionsPage/GameOptionsPage';
 
 
 function App() {
@@ -31,8 +32,6 @@ function App() {
     console.log(moveResult)
     db.collection("moveresult").doc("result").update({success: moveResult})
     console.log("write move result to database")
-    
-   
   }
 
 
@@ -67,13 +66,48 @@ function App() {
     }
 })
   
-  
+
+  const [gameMode, setGameMode] = useState("Standard");
+  const [opponent, setOpponent] = useState("Computer");
+
+  useEffect(() => {
+    setPosition(window.localStorage.getItem('position'));
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem('position', position);
+  }, [position]);
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
+
           {/* <Route path={appRoutes.menu} element={<MainMenu />}></Route> */}
           <Route path={appRoutes.game} element={<GamePage initPosition={position} db={db} origin={origin} destination = {destination} updateMoveResult= {updateMoveResult} readyToMove={readyToMove} setReadyToMove={setReadyToMove} setInCheck= {setInCheck} setWinner={setWinner} />}></Route>
+
+          <Route path={appRoutes.menu} element={<MainMenu />}></Route>
+          <Route 
+            path={appRoutes.game} 
+            element={
+              <GamePage 
+                initPosition={position} 
+                gameMode={gameMode} 
+                opponent={opponent}
+              />
+            }>
+          </Route>
+          <Route 
+            path={appRoutes.gameOptions} 
+            element={
+              <GameOptionsPage 
+                setGameMode={setGameMode} 
+                setOpponent={setOpponent}
+                setPosition={setPosition}
+              />
+            }>
+          </Route>
+
         </Routes>
       </BrowserRouter>
     </div>

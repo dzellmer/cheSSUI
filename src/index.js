@@ -29,8 +29,12 @@ const db = firebase.firestore()
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <React.StrictMode>
     <App app={app}/>
+  </React.StrictMode>
+    // <App app={app}/>
 );
+reportWebVitals();
 export default db;
 
 // If you want to start measuring performance in your app, pass a function
