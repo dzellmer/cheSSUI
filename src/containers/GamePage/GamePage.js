@@ -1,17 +1,86 @@
 import { Chess } from "chess.js";
 import Chessboard from "chessboardjsx";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
-
+import {onSnapshot, doc} from 'firebase/firestore';
 import appRoutes from '../../shared/appRoutes';
 
 export default function GamePage(props) {
 
+    console.log(props.origin)
+    console.log(props.destination)
+    console.log(props.updateMoveResult)
+    let db = props.db
+
+    const [start, setStart] = useState('')
+    const [end, setEnd] = useState('')
     const [chessObj, setChessObj] = useState(props.gameMode === "Puzzle" ? new Chess(props.initPosition) : new Chess());
     const [mirrorChessObj, setMirrorChessObj] = useState(props.gameMode === "Puzzle" ? new Chess(props.initPosition) : new Chess());
     const [position, setPosition] = useState(props.initPosition);
 
+
+    // readAndWriteDatabase()
+
+    if(props.origin !== start) {
+        console.log('update start')
+        setStart(props.origin)
+    }
+
+    if(props.destination !== end) {
+        console.log('unpdate end')
+        setEnd(props.destination)
+    }
+
+
+
+    
+    // let rr = chessObj.move({from: props.origin, to: props.destination}) 
+    // console.log(rr)
+    // setPosition(chessObj.fen());
+
+    useEffect(() => {
+        console.log(start)
+        console.log(end)
+        if(props.readyToMove === true) {
+            
+            let r = chessObj.move({from: start, to: end}) 
+            console.log(r)
+            if(r != null) {
+                console.log("come to set position")
+                setPosition(chessObj.fen());
+            }
+            if(r == null) {
+                console.log('come to r == null branch')
+                props.updateMoveResult(false);
+            }else{
+                props.updateMoveResult(true)
+            }
+
+            let checkmate = chessObj.inCheck()
+            if(checkmate === true) {
+                props.setInCheck(true)
+            }
+
+            let over = chessObj.isGameOver()
+            console.log(over)
+            if(over === true) {
+                let t = chessObj.turn()
+                if(t == 'w') {
+                    props.setWinner('black')
+                }else{
+                    props.setWinner('white')
+
+                }
+            }
+
+            props.setReadyToMove(false)
+        }
+    })
+
+    
+
+    
     const onlyUnique = (value, index, self) => {
         return self.indexOf(value) === index;
     }
@@ -100,7 +169,7 @@ export default function GamePage(props) {
         undoMoveBtn.classList.add("disabled");
         restartGameBtn.classList.add("disabled");
     }
-
+  
     return (
         <div className="GamePage page">
             <Chessboard
@@ -121,6 +190,13 @@ export default function GamePage(props) {
                     <Button className="game-menu-button" color="primary" size="lg">Main Menu</Button>
                 </Link>
             </div>
+
+            {/* <div className="mode-menu">
+                <Button className="game-menu-button" color="warning" size="lg" >Standard gameplay</Button>
+                <Button className="game-menu-button" color="warning" size="lg" disabled>Fog of war</Button>
+                <Button className="game-menu-button" color="warning" size="lg" disabled>Board solver mode</Button>
+            </div> */}
+            
         </div>
     )
 };
