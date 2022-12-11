@@ -12,21 +12,16 @@ function App() {
   const [position, setPosition] = useState("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('')
-  const [moveResult, setMoveResult] = useState(true)
   const [readyToMove, setReadyToMove] = useState(false)
   const [incheck, setInCheck] = useState(false)
   const [winner, setWinner] = useState('')
 
   function updateMoveResult(r) {
-    setMoveResult(r)
-    console.log('come to updateMoveResult')
-    setTimeout(writeResultToDb, 1000)
+    db.collection("moveresult").doc("result").update({success: r})
   }
 
-  function writeResultToDb() {
-    console.log(moveResult)
-    db.collection("moveresult").doc("result").update({success: moveResult})
-    console.log("write move result to database")
+  function cleanDatabase() {
+    db.collection("chessmove").doc("move").update({origin: "", destination: ""})
   }
 
   useEffect(() =>{
@@ -76,7 +71,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={appRoutes.game} element={<GamePage initPosition={position} db={db} origin={origin} destination = {destination} updateMoveResult= {updateMoveResult} readyToMove={readyToMove} setReadyToMove={setReadyToMove} setInCheck= {setInCheck} setWinner={setWinner} />}></Route>
-          <Route path={appRoutes.menu} element={<MainMenu />}></Route>
+          <Route path={appRoutes.menu} element={<MainMenu cleanDatabase={cleanDatabase}/>}></Route>
           <Route 
             path={appRoutes.game} 
             element={
@@ -94,6 +89,7 @@ function App() {
                 setGameMode={setGameMode} 
                 setOpponent={setOpponent}
                 setPosition={setPosition}
+                cleanDatabase={cleanDatabase}
               />
             }>
           </Route>
