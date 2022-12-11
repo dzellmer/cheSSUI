@@ -19,9 +19,6 @@ export default function GamePage(props) {
     const [mirrorChessObj, setMirrorChessObj] = useState(props.gameMode === "Puzzle" ? new Chess(props.initPosition) : new Chess());
     const [position, setPosition] = useState(props.initPosition);
 
-
-    // readAndWriteDatabase()
-
     if(props.origin !== start) {
         console.log('update start')
         setStart(props.origin)
@@ -70,16 +67,11 @@ export default function GamePage(props) {
                     props.setWinner('black')
                 }else{
                     props.setWinner('white')
-
                 }
             }
-
             props.setReadyToMove(false)
         }
     })
-
-    
-
     
     const onlyUnique = (value, index, self) => {
         return self.indexOf(value) === index;
@@ -189,14 +181,7 @@ export default function GamePage(props) {
                 <Link to={appRoutes.menu}>
                     <Button className="game-menu-button" color="primary" size="lg">Main Menu</Button>
                 </Link>
-            </div>
-
-            {/* <div className="mode-menu">
-                <Button className="game-menu-button" color="warning" size="lg" >Standard gameplay</Button>
-                <Button className="game-menu-button" color="warning" size="lg" disabled>Fog of war</Button>
-                <Button className="game-menu-button" color="warning" size="lg" disabled>Board solver mode</Button>
-            </div> */}
-            
+            </div> 
         </div>
     )
 };

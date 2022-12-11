@@ -40,8 +40,8 @@ h2 {
 .page {
   width: 750px;
   height: 750px;
-  border-radius: 10%;
-  background-color: lightgray;
+  border-radius: 2%;
+  background-color: white;
   overflow: hidden;
 }
 
