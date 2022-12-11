@@ -17,6 +17,8 @@ function App() {
   const [destination, setDestination] = useState('')
   const [moveResult, setMoveResult] = useState(true)
   const [readyToMove, setReadyToMove] = useState(false)
+  const [incheck, setInCheck] = useState(false)
+  const [winner, setWinner] = useState('')
 
   function updateMoveResult(r) {
     setMoveResult(r)
@@ -28,7 +30,9 @@ function App() {
   function writeResultToDb() {
     console.log(moveResult)
     db.collection("moveresult").doc("result").update({success: moveResult})
-    console.log("Document written")
+    console.log("write move result to database")
+    
+   
   }
 
 
@@ -48,7 +52,19 @@ function App() {
       if(dest !== destination) {
         setDestination(dest)
       } 
-  });   
+      console.log(incheck)
+      console.log(winner)
+    }); 
+      
+    if(incheck === true) {
+      db.collection("checkmate").doc("check").update({checking: true})
+      console.log("write checkmate to database")
+    }
+
+    if(winner !== '') {
+      db.collection("checkwinner").doc("winner").update({win: winner})
+      console.log("write winner to database")
+    }
 })
   
   
@@ -57,11 +73,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* <Route path={appRoutes.menu} element={<MainMenu />}></Route> */}
-          <Route path={appRoutes.game} element={<GamePage initPosition={position}  origin={origin} destination = {destination} updateMoveResult= {updateMoveResult} readyToMove={readyToMove} setReadyToMove={setReadyToMove}/>}></Route>
+          <Route path={appRoutes.game} element={<GamePage initPosition={position} db={db} origin={origin} destination = {destination} updateMoveResult= {updateMoveResult} readyToMove={readyToMove} setReadyToMove={setReadyToMove} setInCheck= {setInCheck} setWinner={setWinner} />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
   );
 }
+
+//origin={origin} destination = {destination} updateMoveResult= {updateMoveResult} readyToMove={readyToMove} setReadyToMove={setReadyToMove}
 
 export default App;

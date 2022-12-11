@@ -6,6 +6,7 @@ const {Card, Suggestion} = require('dialogflow-fulfillment');
 const admin = require('firebase-admin');
 admin.initializeApp();
 const db = admin.firestore();
+import {onSnapshot} from 'firebase/firestore';
  
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
  
@@ -25,7 +26,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
   function resultHandler(agent) {
     console.log("come into result handler");
-    return setTimeout(readFromDb, 50000, agent);
+    return readFromDb (agent);
   }
 
   function writeToDb (move) {
@@ -38,7 +39,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         t.set(docRef, {
           origin:move.origin, destination:move.destination
         });
-        resultHandler(agent)
     
       });
     }).catch(err => {
@@ -52,7 +52,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     const docRef =db.collection("moveresult").doc("result");
     return db.runTransaction(t => {
       return t.get(docRef)
-      .then(doc => {
+      .then(onSnapshot((doc) => {
         if(doc.data().success === true){
           agent.add("Valid move");
           
@@ -60,35 +60,35 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
           return db.runTransaction(t => {
             console.log("getting checkmate information");
                return t.get(checkRef)
-               .then(doc => {
+               .then(onSnapshot((doc) => {
                  if(doc.data().checking === true){
-                   agent.add("Be careful checkmate");
+                   //agent.add("Be careful checkmate");
                  }
                  
                  const winnerRef =db.collection("checkwinner").doc("winner");
                  return db.runTransaction(t => {
                     console.log("getting winner information");
                     return t.get(winnerRef)
-                          .then(doc => {
+                          .then(onSnapshot((doc) => {
                      
                            
                            if(doc.data().win !== ""){
+                             console.log("enter add winner to agent");
                              let w = doc.data().win;
-                           	 agent.add(w + " win the game");
+                             console.log(w);
+                           	 agent.add("game over! " + w + " win the game");
                           }
                
-               });});
+               }));});
                  
-               });});
-          
-          
-          
-          
+               
+               }));});
+ 
         }else{
           console.log("enter invalid move");
           agent.add("Invalid move. Try again"); 
         }
-      });
+      }));
            
     }).catch(err => {
       console.log(`Error reading from Firestore: ${err}`);
@@ -110,6 +110,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   intentMap.set('Default Welcome Intent', welcome);
   intentMap.set('Default Fallback Intent', fallback);
   intentMap.set('move', moveHandler);
-  // intentMap.set('Result', resultHandler);
+  intentMap.set('Result', resultHandler);
   agent.handleRequest(intentMap);
 });

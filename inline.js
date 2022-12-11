@@ -61,7 +61,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                return t.get(checkRef)
                .then(doc => {
                  if(doc.data().checking === true){
-                   agent.add("Be careful checkmate");
+                   //agent.add("Be careful checkmate");
                  }
                  
                  const winnerRef =db.collection("checkwinner").doc("winner");
@@ -72,12 +72,17 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                      
                            
                            if(doc.data().win !== ""){
+                             console.log("enter add winner to agent");
                              let w = doc.data().win;
-                           	 agent.add(w + " win the game");
+                             console.log(w);
+                           	 agent.add("game over! " + w + " win the game");
                           }
+               
                });});
+                 
+               
                });});
-          
+ 
         }else{
           console.log("enter invalid move");
           agent.add("Invalid move. Try again"); 
