@@ -3,11 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
-
 import 'bootstrap/dist/css/bootstrap.css';
-
-import { initializeApp } from 'firebase/app';
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 
@@ -20,19 +16,14 @@ const firebaseConfig = {
   appId: "1:38527090475:web:f2e1f698e07533886c8f6e"
 };
 
-// Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore()
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App app={app}/>
   </React.StrictMode>
-    // <App app={app}/>
 );
 reportWebVitals();
 export default db;

@@ -3,11 +3,9 @@ import Chessboard from "chessboardjsx";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
-import {onSnapshot, doc} from 'firebase/firestore';
 import appRoutes from '../../shared/appRoutes';
 
 export default function GamePage(props) {
-
     console.log(props.origin)
     console.log(props.destination)
     console.log(props.updateMoveResult)
@@ -28,13 +26,6 @@ export default function GamePage(props) {
         console.log('unpdate end')
         setEnd(props.destination)
     }
-
-
-
-    
-    // let rr = chessObj.move({from: props.origin, to: props.destination}) 
-    // console.log(rr)
-    // setPosition(chessObj.fen());
 
     useEffect(() => {
         console.log(start)
