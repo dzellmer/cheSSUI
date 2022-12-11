@@ -28,18 +28,14 @@ export default function GamePage(props) {
     }
 
     useEffect(() => {
-        console.log(start)
-        console.log(end)
         if(props.readyToMove === true) {
             
             let r = chessObj.move({from: start, to: end}) 
             console.log(r)
             if(r != null) {
-                console.log("come to set position")
                 setPosition(chessObj.fen());
             }
-            if(r == null) {
-                console.log('come to r == null branch')
+            if(r === null) {
                 props.updateMoveResult(false);
             }else{
                 props.updateMoveResult(true)

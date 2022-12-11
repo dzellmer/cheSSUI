@@ -9,9 +9,15 @@ import chessPuzzles from "../../shared/chessPuzzles";
 import { standardStartingPositon, fogOfWarStartingPosition } from "../../shared/positions";
 
 export default function GameOptionsPage(props) {
+    console.log(props.cleanDatabase)
 
     const gameModeOptions = ["Standard", "Puzzle", "Fog of War"].map((val) => <option value={val}>{val}</option>);
     const opponentOptions = ["Human", "Computer"].map((val) => <option value={val}>{val}</option>);
+
+    function clean(){
+        props.cleanDatabase()
+
+    }
 
     const puzzles = chessPuzzles.map(p => {
         return (
@@ -72,7 +78,7 @@ export default function GameOptionsPage(props) {
 
                 <div className="horizontal-buttons">
                     <Link to={appRoutes.game}>
-                        <Button className="menu-button" color="primary" size="lg">Start Game</Button>
+                        <Button className="menu-button" color="primary" size="lg" onClick={clean}>Start Game</Button>
                     </Link>
                     <Link to={appRoutes.menu}>
                         <Button className="menu-button" color="primary" size="lg">Return to Main Menu</Button>
