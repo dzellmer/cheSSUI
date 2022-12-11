@@ -3,11 +3,9 @@ import Chessboard from "chessboardjsx";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
-import {onSnapshot, doc} from 'firebase/firestore';
 import appRoutes from '../../shared/appRoutes';
 
 export default function GamePage(props) {
-
     console.log(props.origin)
     console.log(props.destination)
     console.log(props.updateMoveResult)
@@ -19,9 +17,6 @@ export default function GamePage(props) {
     const [mirrorChessObj, setMirrorChessObj] = useState(props.gameMode === "Puzzle" ? new Chess(props.initPosition) : new Chess());
     const [position, setPosition] = useState(props.initPosition);
 
-
-    // readAndWriteDatabase()
-
     if(props.origin !== start) {
         console.log('update start')
         setStart(props.origin)
@@ -31,13 +26,6 @@ export default function GamePage(props) {
         console.log('unpdate end')
         setEnd(props.destination)
     }
-
-
-
-    
-    // let rr = chessObj.move({from: props.origin, to: props.destination}) 
-    // console.log(rr)
-    // setPosition(chessObj.fen());
 
     useEffect(() => {
         console.log(start)
@@ -70,16 +58,11 @@ export default function GamePage(props) {
                     props.setWinner('black')
                 }else{
                     props.setWinner('white')
-
                 }
             }
-
             props.setReadyToMove(false)
         }
     })
-
-    
-
     
     const onlyUnique = (value, index, self) => {
         return self.indexOf(value) === index;
@@ -189,14 +172,7 @@ export default function GamePage(props) {
                 <Link to={appRoutes.menu}>
                     <Button className="game-menu-button" color="primary" size="lg">Main Menu</Button>
                 </Link>
-            </div>
-
-            {/* <div className="mode-menu">
-                <Button className="game-menu-button" color="warning" size="lg" >Standard gameplay</Button>
-                <Button className="game-menu-button" color="warning" size="lg" disabled>Fog of war</Button>
-                <Button className="game-menu-button" color="warning" size="lg" disabled>Board solver mode</Button>
-            </div> */}
-            
+            </div> 
         </div>
     )
 };

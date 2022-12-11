@@ -1,16 +1,12 @@
 import './App.css';
-
+import db from "./index";
 import appRoutes from './shared/appRoutes';
 import MainMenu from './containers/MainMenu/MainMenu';
 import GamePage from './containers/GamePage/GamePage'; 
-
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import db from "./index";
 import {onSnapshot,doc } from 'firebase/firestore';
 import GameOptionsPage from './containers/GameOptionsPage/GameOptionsPage';
-
 
 function App() {
   const [position, setPosition] = useState("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
@@ -25,7 +21,6 @@ function App() {
     setMoveResult(r)
     console.log('come to updateMoveResult')
     setTimeout(writeResultToDb, 1000)
-
   }
 
   function writeResultToDb() {
@@ -33,7 +28,6 @@ function App() {
     db.collection("moveresult").doc("result").update({success: moveResult})
     console.log("write move result to database")
   }
-
 
   useEffect(() =>{
     const unsub = onSnapshot(doc(db, "chessmove", "move"), (doc) => {
@@ -66,7 +60,6 @@ function App() {
     }
 })
   
-
   const [gameMode, setGameMode] = useState("Standard");
   const [opponent, setOpponent] = useState("Computer");
 
@@ -82,10 +75,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-
-          {/* <Route path={appRoutes.menu} element={<MainMenu />}></Route> */}
           <Route path={appRoutes.game} element={<GamePage initPosition={position} db={db} origin={origin} destination = {destination} updateMoveResult= {updateMoveResult} readyToMove={readyToMove} setReadyToMove={setReadyToMove} setInCheck= {setInCheck} setWinner={setWinner} />}></Route>
-
           <Route path={appRoutes.menu} element={<MainMenu />}></Route>
           <Route 
             path={appRoutes.game} 
@@ -113,7 +103,5 @@ function App() {
     </div>
   );
 }
-
-//origin={origin} destination = {destination} updateMoveResult= {updateMoveResult} readyToMove={readyToMove} setReadyToMove={setReadyToMove}
 
 export default App;
