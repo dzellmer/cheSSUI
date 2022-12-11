@@ -8,7 +8,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBnTi9djJNjBgkg_GK41YKhcQlkMzSEzTA",
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "chess-qdxh.firebaseapp.com",
   projectId: "chess-qdxh",
   storageBucket: "chess-qdxh.appspot.com",
