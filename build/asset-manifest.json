@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.7dc41fac.css",
-    "main.js": "/static/js/main.59faf6ce.js",
-    "static/js/787.54ded703.chunk.js": "/static/js/787.54ded703.chunk.js",
-    "index.html": "/index.html",
-    "main.7dc41fac.css.map": "/static/css/main.7dc41fac.css.map",
-    "main.59faf6ce.js.map": "/static/js/main.59faf6ce.js.map",
-    "787.54ded703.chunk.js.map": "/static/js/787.54ded703.chunk.js.map"
+    "main.css": "/cheSSUI/static/css/main.7dc41fac.css",
+    "main.js": "/cheSSUI/static/js/main.687f49ef.js",
+    "static/js/787.54ded703.chunk.js": "/cheSSUI/static/js/787.54ded703.chunk.js",
+    "index.html": "/cheSSUI/index.html",
+    "main.7dc41fac.css.map": "/cheSSUI/static/css/main.7dc41fac.css.map",
+    "main.687f49ef.js.map": "/cheSSUI/static/js/main.687f49ef.js.map",
+    "787.54ded703.chunk.js.map": "/cheSSUI/static/js/787.54ded703.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7dc41fac.css",
-    "static/js/main.59faf6ce.js"
+    "static/js/main.687f49ef.js"
   ]
 }
