@@ -1,7 +1,6 @@
 {
   "name": "chessui",
   "version": "0.1.0",
-  "homepage": "https://dzellmer.github.io/cheSSUI",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
