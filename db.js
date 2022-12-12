@@ -52,7 +52,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     const docRef =db.collection("moveresult").doc("result");
     return db.runTransaction(t => {
       return t.get(docRef)
-      .then(onSnapshot((doc) => {
+      .then(onSnapshot(doc), doc => {
         if(doc.data().success === true){
           agent.add("Valid move");
           
@@ -60,16 +60,16 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
           return db.runTransaction(t => {
             console.log("getting checkmate information");
                return t.get(checkRef)
-               .then(onSnapshot((doc) => {
+               .then(onSnapshot(doc), doc => {
                  if(doc.data().checking === true){
-                   //agent.add("Be careful checkmate");
+                   agent.add("Be careful checkmate");
                  }
                  
                  const winnerRef =db.collection("checkwinner").doc("winner");
                  return db.runTransaction(t => {
                     console.log("getting winner information");
                     return t.get(winnerRef)
-                          .then(onSnapshot((doc) => {
+                          .then(onSnapshot(doc), doc => {
                      
                            
                            if(doc.data().win !== ""){
@@ -79,16 +79,16 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                            	 agent.add("game over! " + w + " win the game");
                           }
                
-               }));});
+               });});
                  
                
-               }));});
+               });});
  
         }else{
           console.log("enter invalid move");
           agent.add("Invalid move. Try again"); 
         }
-      }));
+      });
            
     }).catch(err => {
       console.log(`Error reading from Firestore: ${err}`);

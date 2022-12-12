@@ -61,7 +61,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                return t.get(checkRef)
                .then(doc => {
                  if(doc.data().checking === true){
-                   //agent.add("Be careful checkmate");
+                   agent.add("Be careful checkmate");
                  }
                  
                  const winnerRef =db.collection("checkwinner").doc("winner");

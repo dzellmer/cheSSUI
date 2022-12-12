@@ -17,6 +17,7 @@ function App() {
   const [winner, setWinner] = useState('')
 
   function updateMoveResult(r) {
+    console.log(r)
     db.collection("moveresult").doc("result").update({success: r})
   }
 
