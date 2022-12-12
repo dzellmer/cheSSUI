@@ -2,10 +2,10 @@ import './App.css';
 import db from "./index";
 import appRoutes from './shared/appRoutes';
 import MainMenu from './containers/MainMenu/MainMenu';
-import GamePage from './containers/GamePage/GamePage'; 
+import GamePage from './containers/GamePage/GamePage';
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import {onSnapshot,doc } from 'firebase/firestore';
+import { onSnapshot, doc } from 'firebase/firestore';
 import GameOptionsPage from './containers/GameOptionsPage/GameOptionsPage';
 
 function App() {
@@ -15,48 +15,47 @@ function App() {
   const [readyToMove, setReadyToMove] = useState(false)
   const [incheck, setInCheck] = useState(false)
   const [winner, setWinner] = useState('')
+  const [gameMode, setGameMode] = useState("Standard");
+  const [opponent, setOpponent] = useState("Computer");
 
   function updateMoveResult(r) {
-    db.collection("moveresult").doc("result").update({success: r})
+    db.collection("moveresult").doc("result").update({ success: r })
   }
 
   function cleanDatabase() {
-    db.collection("chessmove").doc("move").update({origin: "", destination: ""})
+    db.collection("chessmove").doc("move").update({ origin: "", destination: "" })
   }
 
-  useEffect(() =>{
+  useEffect(() => {
     const unsub = onSnapshot(doc(db, "chessmove", "move"), (doc) => {
       let d = doc.data()
       let orig = d.origin[0]
       let dest = d.destination[0]
       console.log(dest)
       console.log(orig)
-      if(orig !== origin || dest !== destination) {
+      if (orig !== origin || dest !== destination) {
         setReadyToMove(true)
       }
-      if(orig !== origin) {
-          setOrigin(orig)
+      if (orig !== origin) {
+        setOrigin(orig)
       }
-      if(dest !== destination) {
+      if (dest !== destination) {
         setDestination(dest)
-      } 
+      }
       console.log(incheck)
       console.log(winner)
-    }); 
-      
-    if(incheck === true) {
-      db.collection("checkmate").doc("check").update({checking: true})
+    });
+
+    if (incheck === true) {
+      db.collection("checkmate").doc("check").update({ checking: true })
       console.log("write checkmate to database")
     }
 
-    if(winner !== '') {
-      db.collection("checkwinner").doc("winner").update({win: winner})
+    if (winner !== '') {
+      db.collection("checkwinner").doc("winner").update({ win: winner })
       console.log("write winner to database")
     }
-})
-  
-  const [gameMode, setGameMode] = useState("Standard");
-  const [opponent, setOpponent] = useState("Computer");
+  })
 
   useEffect(() => {
     setPosition(window.localStorage.getItem('position'));
@@ -70,30 +69,36 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path={appRoutes.game} element={<GamePage initPosition={position} db={db} origin={origin} destination = {destination} updateMoveResult= {updateMoveResult} readyToMove={readyToMove} setReadyToMove={setReadyToMove} setInCheck= {setInCheck} setWinner={setWinner} />}></Route>
-          <Route path={appRoutes.menu} element={<MainMenu cleanDatabase={cleanDatabase}/>}></Route>
+          <Route path={appRoutes.menu} element={<MainMenu cleanDatabase={cleanDatabase} />}></Route>
           <Route 
             path={appRoutes.game} 
             element={
-              <GamePage 
-                initPosition={position} 
-                gameMode={gameMode} 
-                opponent={opponent}
-              />
+            <GamePage 
+              initPosition={position} 
+              gameMode={gameMode}
+              opponent={opponent}
+              db={db} 
+              origin={origin} 
+              destination={destination} 
+              updateMoveResult={updateMoveResult} 
+              readyToMove={readyToMove} 
+              setReadyToMove={setReadyToMove} 
+              setInCheck={setInCheck} 
+              setWinner={setWinner} 
+            />
             }>
           </Route>
-          <Route 
-            path={appRoutes.gameOptions} 
+          <Route
+            path={appRoutes.gameOptions}
             element={
-              <GameOptionsPage 
-                setGameMode={setGameMode} 
+              <GameOptionsPage
+                setGameMode={setGameMode}
                 setOpponent={setOpponent}
                 setPosition={setPosition}
                 cleanDatabase={cleanDatabase}
               />
             }>
           </Route>
-
         </Routes>
       </BrowserRouter>
     </div>

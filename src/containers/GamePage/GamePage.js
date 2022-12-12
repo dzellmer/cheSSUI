@@ -6,9 +6,6 @@ import { Button } from "reactstrap";
 import appRoutes from '../../shared/appRoutes';
 
 export default function GamePage(props) {
-    console.log(props.origin)
-    console.log(props.destination)
-    console.log(props.updateMoveResult)
     let db = props.db
 
     const [start, setStart] = useState('')
@@ -17,49 +14,45 @@ export default function GamePage(props) {
     const [mirrorChessObj, setMirrorChessObj] = useState(props.gameMode === "Puzzle" ? new Chess(props.initPosition) : new Chess());
     const [position, setPosition] = useState(props.initPosition);
 
-    if(props.origin !== start) {
-        console.log('update start')
+    if (props.origin !== start) {
         setStart(props.origin)
     }
 
-    if(props.destination !== end) {
-        console.log('unpdate end')
+    if (props.destination !== end) {
         setEnd(props.destination)
     }
 
     useEffect(() => {
-        if(props.readyToMove === true) {
-            
-            let r = chessObj.move({from: start, to: end}) 
-            console.log(r)
-            if(r != null) {
+        if (props.readyToMove === true) {
+
+            let r = chessObj.move({ from: start, to: end })
+            if (r != null) {
                 setPosition(chessObj.fen());
             }
-            if(r === null) {
+            if (r === null) {
                 props.updateMoveResult(false);
-            }else{
+            } else {
                 props.updateMoveResult(true)
             }
 
             let checkmate = chessObj.inCheck()
-            if(checkmate === true) {
+            if (checkmate === true) {
                 props.setInCheck(true)
             }
 
             let over = chessObj.isGameOver()
-            console.log(over)
-            if(over === true) {
+            if (over === true) {
                 let t = chessObj.turn()
-                if(t == 'w') {
+                if (t === 'w') {
                     props.setWinner('black')
-                }else{
+                } else {
                     props.setWinner('white')
                 }
             }
             props.setReadyToMove(false)
         }
     })
-    
+
     const onlyUnique = (value, index, self) => {
         return self.indexOf(value) === index;
     }
@@ -148,7 +141,7 @@ export default function GamePage(props) {
         undoMoveBtn.classList.add("disabled");
         restartGameBtn.classList.add("disabled");
     }
-  
+
     return (
         <div className="GamePage page">
             <Chessboard
@@ -168,7 +161,7 @@ export default function GamePage(props) {
                 <Link to={appRoutes.menu}>
                     <Button className="game-menu-button" color="primary" size="lg">Main Menu</Button>
                 </Link>
-            </div> 
+            </div>
         </div>
     )
 };

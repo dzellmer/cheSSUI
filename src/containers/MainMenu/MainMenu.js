@@ -8,9 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChess, faCog } from '@fortawesome/free-solid-svg-icons'
 
 export default function MainMenu(props) {
-    console.log(props.cleanDatabase)
     function clean(){
-        console.log('main menu call cleanDatabase')
         props.cleanDatabase()
     }
 
